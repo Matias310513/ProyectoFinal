@@ -20,3 +20,8 @@ def obtener_temperatura(ciudad):
     else:
         return None
 
+#----------------------------------------------------------------RAIZ----------------------------------------------------------------
+raiz = tk.Tk()
+
+raiz.title('Temperatura Ciudad')
+raiz.config(bg='gray20', bd=20, relief='solid')
