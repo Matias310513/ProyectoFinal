@@ -25,3 +25,9 @@ raiz = tk.Tk()
 
 raiz.title('Temperatura Ciudad')
 raiz.config(bg='gray20', bd=20, relief='solid')
+
+#----------------------------------------------------------------FRAME----------------------------------------------------------------
+mi_frame = tk.Frame()
+mi_frame.pack()
+mi_frame.config(width=1000, height=1000, bg='gray11', bd=11, relief='sunken')
+imagen_inicial = tk.PhotoImage(file='temperatura-img.png').subsample(x=2, y=2)
