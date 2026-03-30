@@ -35,6 +35,9 @@ miContrasena = tk.StringVar()
 miApellido = tk.StringVar()
 miCiudad = tk.StringVar()
 GENERO = tk.IntVar()
+celsius = tk.IntVar()
+kelvin = tk.IntVar() 
+fahrenheit = tk.IntVar()
 
 #----------------------------------------------------------------FRAME----------------------------------------------------------------
 mi_frame = tk.Frame()
@@ -90,7 +93,7 @@ mi_contrasena_entry.config(show='*')
 mi_ciudad_entry = tk.Entry(mi_frame, width=10, fg='gray', bg='gray15', justify='center', font=('Comic Sans Ms', 20), textvariable=miCiudad)
 mi_ciudad_entry.grid(row=7, column=1, padx=10, pady=10)
 
-def codigo_boton():
+def codigo_temperatura():
     ciudad = miCiudad.get()
 
     resultado = obtener_temperatura(ciudad)
@@ -109,7 +112,7 @@ def codigo_boton():
     GENERO.set(0)
 
 #----------------------------------------------------------------BOTON----------------------------------------------------------------
-enviar = tk.Button(mi_frame, text='Enviar', width=10, height=2, font=('Comic Sans Ms', 10), command=codigo_boton)
+enviar = tk.Button(mi_frame, text='Obtener Temperatura', width=10, height=2, font=('Comic Sans Ms', 10), command=codigo_temperatura)
 enviar.grid(row=8, column=0, padx=10, pady=10)
 
 #----------------------------------------------------------------RADIOBUTTON----------------------------------------------------------------
@@ -119,6 +122,13 @@ genero2 = tk.Radiobutton(mi_frame, width=10, height=2, fg='gray', bg='gray15', f
 genero2.grid(row=5, column=2, padx=10, pady=10)
 genero3 = tk.Radiobutton(mi_frame, width=10, height=2, fg='gray', bg='gray15', font=('Comic Sans Ms', 10), text='Otro', variable=GENERO, value=3)
 genero3.grid(row=6, column=2, padx=10, pady=10)
+
+#----------------------------------------------------------------CHECKBUTTON----------------------------------------------------------------
+temp = tk.Label(mi_frame, text='Temperatura en:', fg='green2', bg='gray11', font=('Comic Sans Ms', 10))
+temp.grid(row=2, column=3, padx=10, rowspan=3)
+tk.Checkbutton(mi_frame, text='°C', fg='black', bg='red', font=('Comic Sans Ms', 10), variable=celsius).grid(row=3, column=3, padx=10, pady=10)
+tk.Checkbutton(mi_frame, text='°K', fg='black', bg='blue', font=('Comic Sans Ms', 10), variable=kelvin).grid(row=4, column=3, padx=10, pady=10)
+tk.Checkbutton(mi_frame, text='°F', fg='black', bg='yellow', font=('Comic Sans Ms', 10), variable=fahrenheit).grid(row=5, column=3, padx=10, pady=10)
 
 #----------------------------------------------------------------ACTUALIZAR VENTANA----------------------------------------------------------------
 def actualizar():
