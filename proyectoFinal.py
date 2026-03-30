@@ -40,14 +40,14 @@ GENERO = tk.IntVar()
 mi_frame = tk.Frame()
 mi_frame.pack()
 mi_frame.config(width=1000, height=1000, bg='gray11', bd=11, relief='sunken')
-imagen_inicial = tk.PhotoImage(file='temperatura-img.png').subsample(x=2, y=2)
+imagen_inicial = tk.PhotoImage(file='temperatura-img.png').subsample(x=3, y=3)
 
 #----------------------------------------------------------------LABELS----------------------------------------------------------------
-mi_titulo = tk.Label(mi_frame, text=f'Temperatura hoy: {fecha_actual}', fg='black', font=('Comic Sans Ms', 20))
-mi_titulo.grid(row=0, column=1, columnspan=2, pady=10)
+mi_titulo = tk.Label(mi_frame, text=f'Temperatura hoy: {fecha_actual}', fg='black', font=('Comic Sans Ms', 15))
+mi_titulo.grid(row=0, column=0, columnspan=4, pady=10)
 
-mi_hora = tk.Label(mi_frame, text=f'Hora: {hora_actual}', fg='black', font=('Comic Sans Ms', 20))
-mi_hora.grid(row=1, column=1, columnspan=2, pady=10)
+mi_hora = tk.Label(mi_frame, text=f'Hora: {hora_actual}', fg='black', font=('Comic Sans Ms', 15))
+mi_hora.grid(row=1, column=0, columnspan=4, pady=10)
 
 mi_imagen_label = tk.Label(mi_frame, image=imagen_inicial)
 mi_imagen_label.grid(row=2, column=0, columnspan=3, pady=10)
@@ -70,6 +70,9 @@ mi_ciudad.grid(row=7, column=0, padx=10, pady=10)
 mi_genero = tk.Label(mi_frame, text='Seleccione su genero: ', fg='white', bg='gray11', font=('Comic Sans Ms', 10))
 mi_genero.grid(row=3, column=2, padx=10, pady=10)
 
+resultado_temperatura = tk.Label(mi_frame, text='', fg='orange', bg='gray11', font=('Comic Sans Ms', 10))
+resultado_temperatura.grid(row=9, column=0, padx=10, pady=10)
+
 #----------------------------------------------------------------ENTRY----------------------------------------------------------------
 mi_nombre_entry = tk.Entry(mi_frame, width=10, fg='gray', bg='gray15', justify='center', font=('Comic Sans Ms', 20), textvariable=miNombre)
 mi_nombre_entry.grid(row=3, column=1, padx=10, pady=10)
@@ -88,6 +91,17 @@ mi_ciudad_entry = tk.Entry(mi_frame, width=10, fg='gray', bg='gray15', justify='
 mi_ciudad_entry.grid(row=7, column=1, padx=10, pady=10)
 
 def codigo_boton():
+    ciudad = miCiudad.get()
+
+    resultado = obtener_temperatura(ciudad)
+
+    if resultado:
+        temp_c, temp_k, temp_f = resultado
+        resultado_temperatura.config(text=f'{temp_c}°C | {temp_k}°K | {temp_f}°F')
+
+    else:
+        resultado_temperatura.config(text='Error la obtener la temperatura')
+
     miNombre.set('')
     miApellido.set('')
     miCorreo.set('')
