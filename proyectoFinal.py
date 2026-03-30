@@ -38,12 +38,16 @@ GENERO = tk.IntVar()
 celsius = tk.IntVar()
 kelvin = tk.IntVar() 
 fahrenheit = tk.IntVar()
+temp_c = None
+temp_k = None
+temp_f = None
 
 #----------------------------------------------------------------FRAME----------------------------------------------------------------
 mi_frame = tk.Frame()
 mi_frame.pack()
 mi_frame.config(width=1000, height=1000, bg='gray11', bd=11, relief='sunken')
 imagen_inicial = tk.PhotoImage(file='temperatura-img.png').subsample(x=3, y=3)
+
 
 #----------------------------------------------------------------LABELS----------------------------------------------------------------
 mi_titulo = tk.Label(mi_frame, text=f'Temperatura hoy: {fecha_actual}', fg='black', font=('Comic Sans Ms', 15))
@@ -76,6 +80,9 @@ mi_genero.grid(row=3, column=2, padx=10, pady=10)
 resultado_temperatura = tk.Label(mi_frame, text='', fg='orange', bg='gray11', font=('Comic Sans Ms', 10))
 resultado_temperatura.grid(row=9, column=0, padx=10, pady=10)
 
+temperatura = tk.Label(mi_frame, text='', fg='orange', bg='gray11', font=('Comic Sans Ms', 10))
+temperatura.grid(row=7, column=3, padx=10, pady=10)
+
 #----------------------------------------------------------------ENTRY----------------------------------------------------------------
 mi_nombre_entry = tk.Entry(mi_frame, width=10, fg='gray', bg='gray15', justify='center', font=('Comic Sans Ms', 20), textvariable=miNombre)
 mi_nombre_entry.grid(row=3, column=1, padx=10, pady=10)
@@ -94,6 +101,7 @@ mi_ciudad_entry = tk.Entry(mi_frame, width=10, fg='gray', bg='gray15', justify='
 mi_ciudad_entry.grid(row=7, column=1, padx=10, pady=10)
 
 def codigo_temperatura():
+    global temp_c, temp_k, temp_f
     ciudad = miCiudad.get()
 
     resultado = obtener_temperatura(ciudad)
@@ -101,10 +109,15 @@ def codigo_temperatura():
     if resultado:
         temp_c, temp_k, temp_f = resultado
         resultado_temperatura.config(text=f'{temp_c}°C | {temp_k}°K | {temp_f}°F')
-
     else:
         resultado_temperatura.config(text='Error la obtener la temperatura')
+        temp_c = None
+        temp_k = None
+        temp_f = None
 
+    
+
+def codigo_boton():
     miNombre.set('')
     miApellido.set('')
     miCorreo.set('')
@@ -112,9 +125,11 @@ def codigo_temperatura():
     GENERO.set(0)
 
 #----------------------------------------------------------------BOTON----------------------------------------------------------------
-enviar = tk.Button(mi_frame, text='Obtener Temperatura', width=10, height=2, font=('Comic Sans Ms', 10), command=codigo_temperatura)
-enviar.grid(row=8, column=0, padx=10, pady=10)
+temperatura_boton = tk.Button(mi_frame, text='Obtener Temperatura', width=18, height=1, font=('Comic Sans Ms', 10), command=codigo_temperatura)
+temperatura_boton.grid(row=8, column=0, padx=10, pady=10)
 
+enviar = tk.Button(mi_frame, text='Enviar', width=18, height=1, font=('Comic Sans Ms', 10), command=codigo_boton)
+enviar.grid(row=10, column=0, columnspan=4, pady=10)
 #----------------------------------------------------------------RADIOBUTTON----------------------------------------------------------------
 genero1 = tk.Radiobutton(mi_frame, width=10, height=2, fg='gray', bg='gray15', font=('Comic Sans Ms', 10), text='Femenino', variable=GENERO, value=1)
 genero1.grid(row=4, column=2, padx=10, pady=10)
@@ -123,19 +138,35 @@ genero2.grid(row=5, column=2, padx=10, pady=10)
 genero3 = tk.Radiobutton(mi_frame, width=10, height=2, fg='gray', bg='gray15', font=('Comic Sans Ms', 10), text='Otro', variable=GENERO, value=3)
 genero3.grid(row=6, column=2, padx=10, pady=10)
 
+#----------------------------------------------------------------ACTUALIZAR LABEL CHECKBUTTON----------------------------------------------------------------
+def actualizarLabelCheckbutton():
+    texto = ''
+
+    if temp_c is None:
+        temperatura.config(text='Primero obten la temperatura')
+        return
+    if celsius.get() == 1:
+        texto += f'{temp_c}°C | '
+    if kelvin.get() == 1:
+        texto += f'{temp_k}°K | '
+    if fahrenheit.get() == 1:
+        texto += f'{temp_f}°F'
+
+    temperatura.config(text=texto)
+
 #----------------------------------------------------------------CHECKBUTTON----------------------------------------------------------------
 temp = tk.Label(mi_frame, text='Temperatura en:', fg='green2', bg='gray11', font=('Comic Sans Ms', 10))
 temp.grid(row=2, column=3, padx=10, rowspan=3)
-tk.Checkbutton(mi_frame, text='°C', fg='black', bg='red', font=('Comic Sans Ms', 10), variable=celsius).grid(row=3, column=3, padx=10, pady=10)
-tk.Checkbutton(mi_frame, text='°K', fg='black', bg='blue', font=('Comic Sans Ms', 10), variable=kelvin).grid(row=4, column=3, padx=10, pady=10)
-tk.Checkbutton(mi_frame, text='°F', fg='black', bg='yellow', font=('Comic Sans Ms', 10), variable=fahrenheit).grid(row=5, column=3, padx=10, pady=10)
+tk.Checkbutton(mi_frame, text='°C', fg='black', bg='red', font=('Comic Sans Ms', 10), variable=celsius, command=actualizarLabelCheckbutton).grid(row=3, column=3, padx=10, pady=10)
+tk.Checkbutton(mi_frame, text='°K', fg='black', bg='blue', font=('Comic Sans Ms', 10), variable=kelvin, command=actualizarLabelCheckbutton).grid(row=4, column=3, padx=10, pady=10)
+tk.Checkbutton(mi_frame, text='°F', fg='black', bg='yellow', font=('Comic Sans Ms', 10), variable=fahrenheit, command=actualizarLabelCheckbutton).grid(row=5, column=3, padx=10, pady=10)
 
 #----------------------------------------------------------------ACTUALIZAR VENTANA----------------------------------------------------------------
 def actualizar():
     hora_actual = datetime.datetime.now().strftime('%H:%M:%S')
     mi_hora.config(text=f'Hora: {hora_actual}')
     fecha_actual = datetime.datetime.today().strftime('%A, %d-%B-%Y')
-    mi_titulo.config = tk.Label(mi_frame, text=f'Temperatura hoy: {fecha_actual}', fg='black', font=('Comic Sans Ms', 20))
+    mi_titulo.config(text=f'Temperatura hoy: {fecha_actual}')
     raiz.after(500, actualizar)
 
 actualizar()
