@@ -47,7 +47,9 @@ mi_frame = tk.Frame()
 mi_frame.pack()
 mi_frame.config(width=1000, height=1000, bg='gray11', bd=11, relief='sunken')
 imagen_inicial = tk.PhotoImage(file='temperatura-img.png').subsample(x=3, y=3)
-
+imagen_frio = tk.PhotoImage(file='invierno-img.png').subsample(x=3, y=3)
+imagen_templado = tk.PhotoImage(file='templado-img.png').subsample(x=3, y=3)
+imagen_calor = tk.PhotoImage(file='verano-img.png').subsample(x=3, y=3)
 
 #----------------------------------------------------------------LABELS----------------------------------------------------------------
 mi_titulo = tk.Label(mi_frame, text=f'Temperatura hoy: {fecha_actual}', fg='black', font=('Comic Sans Ms', 15))
@@ -115,7 +117,12 @@ def codigo_temperatura():
         temp_k = None
         temp_f = None
 
-    
+    if temp_c < 10:
+        mi_imagen_label.config(image=imagen_frio)
+    elif temp_c > 10 and temp_c < 25:
+        mi_imagen_label.config(image=imagen_templado)
+    elif temp_c > 25:
+        mi_imagen_label.config(image=imagen_calor)
 
 def codigo_boton():
     miNombre.set('')
